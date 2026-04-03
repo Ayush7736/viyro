@@ -1,8 +1,12 @@
+const API = "https://viyro-backend.onrender.com";
+
 const video = document.getElementById("player");
 
-async function poll(){
+setInterval(checkChunk,2000);
 
-let res = await fetch("/latest");
+async function checkChunk(){
+
+let res = await fetch(`${API}/latest`);
 
 let url = await res.text();
 
@@ -13,8 +17,6 @@ let base64 = await imageToBase64(url);
 playChunk(base64);
 
 }
-
-setInterval(poll,2000);
 
 function imageToBase64(url){
 
@@ -54,6 +56,7 @@ r(text);
 img.src=url;
 
 });
+
 }
 
 function playChunk(base64){
@@ -76,6 +79,10 @@ byteArray[i] = byteChars.charCodeAt(i);
 
 }
 
-return new Blob([byteArray],{type:"video/webm"});
+return new Blob([byteArray],{
+
+type:"video/webm"
+
+});
 
 }
