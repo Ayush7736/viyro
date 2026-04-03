@@ -1,3 +1,5 @@
+const API = "https://viyro-backend.onrender.com";
+
 let mediaRecorder;
 let stream;
 
@@ -22,18 +24,21 @@ let blob = e.data;
 
 let base64 = await blobToBase64(blob);
 
-let imgBlob = base64ToImage(base64);
+let imgBlob = await base64ToImage(base64);
 
 uploadImage(imgBlob);
 
 };
 
-mediaRecorder.start(2000); // 2 sec chunks
+mediaRecorder.start(2000);
 }
 
 function stopCamera(){
+
 mediaRecorder.stop();
+
 stream.getTracks().forEach(t=>t.stop());
+
 }
 
 document.getElementById("start").onclick=startCamera;
@@ -47,14 +52,14 @@ let reader = new FileReader();
 
 reader.onloadend = ()=>{
 
-let b64 = reader.result.split(",")[1];
+r(reader.result.split(",")[1]);
 
-r(b64);
 };
 
 reader.readAsDataURL(blob);
 
 });
+
 }
 
 function base64ToImage(data){
@@ -83,6 +88,7 @@ return new Promise(r=>{
 canvas.toBlob(r,"image/png");
 
 });
+
 }
 
 async function uploadImage(blob){
@@ -91,9 +97,11 @@ let form = new FormData();
 
 form.append("image",blob);
 
-await fetch("/upload",{
+await fetch(`${API}/upload`,{
+
 method:"POST",
 body:form
+
 });
 
 }
